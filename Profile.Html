@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Profile Card</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e3f2fd 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+.ProfileContainer {
+    background-color: #fff;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    max-width: 1000px;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+.ProfileHeader {
+    background-color: #037fde;
+    color: white;
+    padding: 30px;
+    text-align: center;
+    position: relative;
+}
+.ProfileHeader h1 { font-size: 2.2rem; margin-bottom: 10px; font-weight: 700; }
+.ProfileHeader p { font-size: 1.1rem; opacity: 0.9; }
+.ProfileContent {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+@media (min-width: 768px) { .ProfileContent { flex-direction: row; } }
+.ProfilePicture{
+    background-color: #037fde;
+    height: 50vmin;
+    width: 50vmin;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: 1s;
+    box-shadow: 0 0 10px 5px #025fa3;
+}
+.Face{
+    background-color: #fff;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+.Body{
+    background-color: #fff;
+    height: 400px;
+    width: 200px;
+    border-radius: 50%;
+    margin-bottom: -50vmin;
+}
+.InfoSection { flex-grow: 1; }
+.InfoItem { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.InfoItem:last-child { border-bottom: none; }
+.InfoLabel { display: block; font-size: 1.1rem; color: #037fde; font-weight: 600; margin-bottom: 8px; }
+.InfoValue { font-size: 1.3rem; color: #333; font-weight: 500; }
+.BirthdayInfo { display: flex; align-items: center; gap: 10px; }
+.BirthdayIcon { color: #037fde; font-size: 1.5rem; }
+.SkillsContainer { margin-top: 10px; }
+.SkillsTitle { font-size: 1.3rem; color: #037fde; margin-bottom: 15px; font-weight: 600; }
+.SkillsGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.SkillItem {
+    background-color: #037fde;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.SkillItem:hover {
+    background-color: #025fa3;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(3, 127, 222, 0.2);
+}
+.SkillIcon { font-size: 1rem; }
+.StatsSection {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f8fafc;
+    padding: 25px;
+    border-radius: 16px;
+    margin-top: 30px;
+    border: 1px solid #eaeaea;
+}
+.StatItem { text-align: center; }
+.StatValue { font-size: 2.5rem; color: #037fde; font-weight: 700; margin-bottom: 5px; }
+.StatLabel { font-size: 1rem; color: #666; }
+.ContactSection { margin-top: 20px; text-align: center; }
+.ContactLink {
+    display: inline-block;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+.ContactLink:hover { background-color: #037fde; }
+.ThemeToggle {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background-color: rgba(255,255,255,0.2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.ThemeToggle:hover { background-color: rgba(255,255,255,0.3); transform: rotate(30deg); }
+.ThemeToggle i { font-size: 1.5rem; color: white; }
+body.DarkTheme {
+    background: linear-gradient(135deg, #121212 0%, #1e1e2e 100%);
+    color: #e0e0e0;
+}
+body.DarkTheme .ProfileContainer { background-color: #1e1e2e; color: #e0e0e0; }
+body.DarkTheme .ProfileHeader { background-color: #0d5a9e; }
+body.DarkTheme .InfoValue { color: #e0e0e0; }
+body.DarkTheme .InfoItem { border-bottom-color: #333; }
+body.DarkTheme .StatsSection { background-color: #252535; border-color: #333; }
+body.DarkTheme .StatLabel { color: #aaa; }
+body.DarkTheme .SkillItem { background-color: #0d5a9e; }
+body.DarkTheme .SkillItem:hover { background-color: #0a477a; }
+@media (max-width: 767px) {
+    .ProfileContent { flex-direction: column; align-items: center; }
+    .ProfilePicture { margin-bottom: 30px; }
+    .StatsSection { flex-direction: column; gap: 25px; }
+    .SkillsGrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    .ProfileHeader h1 { font-size: 1.8rem; }
+    .ProfileContent { padding: 25px; }
+    .InfoValue { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body>
+<div class="ProfileContainer">
+    <div class="ProfileHeader">
+        <div class="ThemeToggle" id="ThemeToggle">
+            <i class="fas fa-moon"></i>
+        </div>
+        <h1>Adham Mostafa Omar Taha</h1>
+        <p>Front-End Developer & Game Developer</p>
+    </div>
+    <div class="ProfileContent">
+        <div class="ProfilePicture">
+            <div class="Face"></div>
+            <div class="Body"></div>
+        </div>
+        <div class="InfoSection">
+            <div class="InfoItem">
+                <span class="InfoLabel">Full Name</span>
+                <div class="InfoValue">Adham Mostafa Omar Taha</div>
+            </div>
+            <div class="InfoItem">
+                <span class="InfoLabel">Birthday</span>
+                <div class="BirthdayInfo">
+                    <i class="fas fa-birthday-cake BirthdayIcon"></i>
+                    <span class="InfoValue">April 6, 2014</span>
+                </div>
+            </div>
+            <div class="InfoItem">
+                <span class="InfoLabel">Age</span>
+                <div class="InfoValue" id="AgeValue">Calculating...</div>
+            </div>
+            <div class="InfoItem">
+                <span class="SkillsTitle">Skills & Expertise</span>
+                <div class="SkillsContainer">
+                    <div class="SkillsGrid">
+                        <div class="SkillItem"><i class="fas fa-language SkillIcon"></i><span>English</span></div>
+                        <div class="SkillItem"><i class="fas fa-comments SkillIcon"></i><span>Communication</span></div>
+                        <div class="SkillItem"><i class="fas fa-search SkillIcon"></i><span>Research Skills</span></div>
+                        <div class="SkillItem"><i class="fas fa-code SkillIcon"></i><span>Front-End Development</span></div>
+                        <div class="SkillItem"><i class="fas fa-gamepad SkillIcon"></i><span>Game Development</span></div>
+                        <div class="SkillItem"><i class="fas fa-lightbulb SkillIcon"></i><span>Problem Solving</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ContactSection">
+                <a href="https://scratch.mit.edu/users/AdhamMostafa14227/" target="_blank" class="ContactLink"><i class="fas fa-rocket"></i> Scratch</a>
+                <a href="https://www.facebook.com/profile.php?id=61578969137540" target="_blank" class="ContactLink"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="https://github.com/Adham-Mostafa14227" target="_blank" class="ContactLink"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://www.linkedin.com/in/adham-mostafa-0545023a7/" target="_blank" class="ContactLink"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </div>
+    </div>
+    <div class="StatsSection">
+        <div class="StatItem">
+            <div class="StatValue" id="ProjectsCount">5+</div>
+            <div class="StatLabel">Projects Completed</div>
+        </div>
+        <div class="StatItem">
+            <div class="StatValue" id="ExperienceYears">3+</div>
+            <div class="StatLabel">Years of Experience</div>
+        </div>
+        <div class="StatItem">
+            <div class="StatValue" id="SkillsCount">6</div>
+            <div class="StatLabel">Skills Mastered</div>
+        </div>
+    </div>
+</div>
+<script>
+function calculateAge(birthday){
+    const birthDate=new Date(birthday);
+    const today=new Date();
+    let age=today.getFullYear()-birthDate.getFullYear();
+    const monthDiff=today.getMonth()-birthDate.getMonth();
+    if(monthDiff<0||(monthDiff===0 && today.getDate()<birthDate.getDate())) age--;
+    return age;
+}
+function updateAge(){
+    const birthday=new Date(2014,3,6);
+    const age=calculateAge(birthday);
+    document.getElementById('AgeValue').textContent=`${age} years old`;
+}
+const ThemeToggle=document.getElementById('ThemeToggle');
+const ThemeIcon=ThemeToggle.querySelector('i');
+ThemeToggle.addEventListener('click',()=>{
+    document.body.classList.toggle('DarkTheme');
+    ThemeIcon.className=document.body.classList.contains('DarkTheme')?'fas fa-sun':'fas fa-moon';
+});
+document.querySelectorAll('.SkillItem').forEach(skill=>{
+    skill.addEventListener('click',()=>{
+        const skillName=skill.querySelector('span').textContent;
+        alert(`You selected: ${skillName}\n\nAdham has demonstrated proficiency in this area through various projects and learning activities.`);
+    });
+});
+function animateCounter(element,targetValue,suffix=''){
+    let currentValue=0;
+    const increment=targetValue/50;
+    const timer=setInterval(()=>{
+        currentValue+=increment;
+        if(currentValue>=targetValue){currentValue=targetValue; clearInterval(timer);}
+        element.textContent=Math.floor(currentValue)+suffix;
+    },30);
+}
+document.addEventListener('DOMContentLoaded',()=>{
+    updateAge();
+    setTimeout(()=>{
+        animateCounter(document.getElementById('ProjectsCount'),5,'+');
+        animateCounter(document.getElementById('ExperienceYears'),3,'+');
+        animateCounter(document.getElementById('SkillsCount'),6);
+    },500);
+    const profilePicture=document.querySelector('.ProfilePicture');
+    profilePicture.addEventListener('mouseenter',()=>profilePicture.style.transform='scale(1.05)');
+    profilePicture.addEventListener('mouseleave',()=>profilePicture.style.transform='scale(1)');
+});
+</script>
+</body>
+</html>
