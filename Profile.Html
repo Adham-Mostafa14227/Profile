@@ -220,7 +220,7 @@ body.DarkTheme .SkillItem:hover { background-color: #0a477a; }
     </div>
     <div class="StatsSection">
         <div class="StatItem">
-            <div class="StatValue" id="ProjectsCount">5+</div>
+            <div class="StatValue" id="ProjectsCount">10+</div>
             <div class="StatLabel">Projects Completed</div>
         </div>
         <div class="StatItem">
@@ -271,7 +271,7 @@ function animateCounter(element,targetValue,suffix=''){
 document.addEventListener('DOMContentLoaded',()=>{
     updateAge();
     setTimeout(()=>{
-        animateCounter(document.getElementById('ProjectsCount'),5,'+');
+        animateCounter(document.getElementById('ProjectsCount'),10,'+');
         animateCounter(document.getElementById('ExperienceYears'),3,'+');
         animateCounter(document.getElementById('SkillsCount'),6);
     },500);
@@ -283,3 +283,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 </body>
 
 </html>
+
