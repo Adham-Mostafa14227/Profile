@@ -1,286 +1,620 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Interactive Profile Card</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f5f5f5 0%, #e3f2fd 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-}
-.ProfileContainer {
-    background-color: #fff;
-    border-radius: 24px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    max-width: 1000px;
-    width: 100%;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    position: relative;
-}
-.ProfileHeader {
-    background-color: #037fde;
-    color: white;
-    padding: 30px;
-    text-align: center;
-    position: relative;
-}
-.ProfileHeader h1 { font-size: 2.2rem; margin-bottom: 10px; font-weight: 700; }
-.ProfileHeader p { font-size: 1.1rem; opacity: 0.9; }
-.ProfileContent {
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-@media (min-width: 768px) { .ProfileContent { flex-direction: row; } }
-.ProfilePicture{
-    background-color: #037fde;
-    height: 50vmin;
-    width: 50vmin;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    transition: 1s;
-    box-shadow: 0 0 10px 5px #025fa3;
-}
-.Face{
-    background-color: #fff;
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    margin-bottom: 20px;
-}
-.Body{
-    background-color: #fff;
-    height: 400px;
-    width: 200px;
-    border-radius: 50%;
-    margin-bottom: -50vmin;
-}
-.InfoSection { flex-grow: 1; }
-.InfoItem { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-.InfoItem:last-child { border-bottom: none; }
-.InfoLabel { display: block; font-size: 1.1rem; color: #037fde; font-weight: 600; margin-bottom: 8px; }
-.InfoValue { font-size: 1.3rem; color: #333; font-weight: 500; }
-.BirthdayInfo { display: flex; align-items: center; gap: 10px; }
-.BirthdayIcon { color: #037fde; font-size: 1.5rem; }
-.SkillsContainer { margin-top: 10px; }
-.SkillsTitle { font-size: 1.3rem; color: #037fde; margin-bottom: 15px; font-weight: 600; }
-.SkillsGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-.SkillItem {
-    background-color: #037fde;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 500;
-    text-align: center;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-.SkillItem:hover {
-    background-color: #025fa3;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(3, 127, 222, 0.2);
-}
-.SkillIcon { font-size: 1rem; }
-.StatsSection {
-    display: flex;
-    justify-content: space-around;
-    background-color: #f8fafc;
-    padding: 25px;
-    border-radius: 16px;
-    margin-top: 30px;
-    border: 1px solid #eaeaea;
-}
-.StatItem { text-align: center; }
-.StatValue { font-size: 2.5rem; color: #037fde; font-weight: 700; margin-bottom: 5px; }
-.StatLabel { font-size: 1rem; color: #666; }
-.ContactSection { margin-top: 20px; text-align: center; }
-.ContactLink {
-    display: inline-block;
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    margin: 5px;
-    transition: all 0.3s ease;
-}
-.ContactLink:hover { background-color: #037fde; }
-.ThemeToggle {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    background-color: rgba(255,255,255,0.2);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.ThemeToggle:hover { background-color: rgba(255,255,255,0.3); transform: rotate(30deg); }
-.ThemeToggle i { font-size: 1.5rem; color: white; }
-body.DarkTheme {
-    background: linear-gradient(135deg, #121212 0%, #1e1e2e 100%);
-    color: #e0e0e0;
-}
-body.DarkTheme .ProfileContainer { background-color: #1e1e2e; color: #e0e0e0; }
-body.DarkTheme .ProfileHeader { background-color: #0d5a9e; }
-body.DarkTheme .InfoValue { color: #e0e0e0; }
-body.DarkTheme .InfoItem { border-bottom-color: #333; }
-body.DarkTheme .StatsSection { background-color: #252535; border-color: #333; }
-body.DarkTheme .StatLabel { color: #aaa; }
-body.DarkTheme .SkillItem { background-color: #0d5a9e; }
-body.DarkTheme .SkillItem:hover { background-color: #0a477a; }
-@media (max-width: 767px) {
-    .ProfileContent { flex-direction: column; align-items: center; }
-    .ProfilePicture { margin-bottom: 30px; }
-    .StatsSection { flex-direction: column; gap: 25px; }
-    .SkillsGrid { grid-template-columns: 1fr; }
-}
-@media (max-width: 480px) {
-    .ProfileHeader h1 { font-size: 1.8rem; }
-    .ProfileContent { padding: 25px; }
-    .InfoValue { font-size: 1.1rem; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Adham Mostafa | Creative Developer Portfolio</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Montserrat:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F2F4F5;
+            font-family: 'Inter', sans-serif;
+            color: #1A1A1A;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        h1,
+        h2,
+        h3,
+        .logo,
+        .nav-link,
+        .btn {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #1F2A44;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1F2A44;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: #E85C6A;
+            /* Coral accent */
+            border-radius: 4px;
+        }
+
+        h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1F2A44;
+            margin-bottom: 0.5rem;
+        }
+
+        .section {
+            padding: 70px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #E85C6A;
+            color: white;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 40px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(232, 92, 106, 0.2);
+        }
+
+        .btn:hover {
+            background-color: #cf4a58;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(232, 92, 106, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #E85C6A;
+            color: #E85C6A;
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: #E85C6A;
+            color: white;
+        }
+
+        .navbar {
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #1F2A44;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: #E85C6A;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #1F2A44;
+            transition: color 0.2s;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover {
+            color: #E85C6A;
+        }
+
+        .hero {
+            padding: 40px 0 60px 0;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-text .tagline {
+            font-size: 1.2rem;
+            color: #E85C6A;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.2px;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            margin: 1rem 0 1.8rem;
+            max-width: 500px;
+            color: #2c2c2c;
+        }
+
+        .hero-image {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #f5e6e0 0%, #f2e2db 100%);
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.15);
+            border: 4px solid white;
+        }
+
+        .hero-image i {
+            font-size: 7rem;
+            color: #1F2A44;
+            opacity: 0.85;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 28px;
+            padding: 28px 24px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02), 0 6px 6px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 36px -12px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-icon {
+            font-size: 2.8rem;
+            color: #E85C6A;
+            margin-bottom: 20px;
+        }
+
+        .project-card h3 {
+            margin-bottom: 12px;
+        }
+
+        .project-card p {
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .project-link {
+            font-weight: 600;
+            text-decoration: none;
+            color: #E85C6A;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.2s;
+        }
+
+        .project-link:hover {
+            gap: 12px;
+            color: #b3434f;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .skill-badge {
+            background: #D9D9D9;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1F2A44;
+            transition: all 0.2s;
+            backdrop-filter: blur(2px);
+        }
+
+        .skill-badge i {
+            margin-right: 8px;
+            color: #E85C6A;
+        }
+
+        .goals-content {
+            background: white;
+            border-radius: 32px;
+            padding: 32px 28px;
+            box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.05);
+            border-left: 6px solid #E85C6A;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 48px;
+            padding: 16px 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #1F2A44;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+            border: 1px solid #eceef0;
+        }
+
+        .contact-card i {
+            font-size: 1.7rem;
+            color: #E85C6A;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-4px);
+            background: #FEF6F4;
+            border-color: #E85C6A;
+            box-shadow: 0 12px 18px -10px rgba(232, 92, 106, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0 30px;
+            color: #6c6f78;
+            font-size: 0.85rem;
+            border-top: 1px solid #e2e4e6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            h1 {
+                font-size: 2.4rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .hero-content {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+
+            .hero-text p {
+                max-width: 100%;
+            }
+
+            .navbar {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                gap: 24px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .hero-image i {
+                font-size: 5rem;
+            }
+
+            .section {
+                padding: 50px 0;
+            }
+
+            .contact-card {
+                padding: 12px 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 10px 20px;
+            }
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
+
 <body>
-<div class="ProfileContainer">
-    <div class="ProfileHeader">
-        <div class="ThemeToggle" id="ThemeToggle">
-            <i class="fas fa-moon"></i>
-        </div>
-        <h1>Adham Mostafa Omar Taha</h1>
-        <p>Front-End Developer & Game Developer</p>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Connect</a></li>
+            </ul>
+        </nav>
     </div>
-    <div class="ProfileContent">
-        <div class="ProfilePicture">
-            <div class="Face"></div>
-            <div class="Body"></div>
-        </div>
-        <div class="InfoSection">
-            <div class="InfoItem">
-                <span class="InfoLabel">Full Name</span>
-                <div class="InfoValue">Adham Mostafa Omar Taha</div>
-            </div>
-            <div class="InfoItem">
-                <span class="InfoLabel">Birthday</span>
-                <div class="BirthdayInfo">
-                    <i class="fas fa-birthday-cake BirthdayIcon"></i>
-                    <span class="InfoValue">April 6, 2014</span>
-                </div>
-            </div>
-            <div class="InfoItem">
-                <span class="InfoLabel">Age</span>
-                <div class="InfoValue" id="AgeValue">Calculating...</div>
-            </div>
-            <div class="InfoItem">
-                <span class="SkillsTitle">Skills & Expertise</span>
-                <div class="SkillsContainer">
-                    <div class="SkillsGrid">
-                        <div class="SkillItem"><i class="fas fa-language SkillIcon"></i><span>English</span></div>
-                        <div class="SkillItem"><i class="fas fa-comments SkillIcon"></i><span>Communication</span></div>
-                        <div class="SkillItem"><i class="fas fa-search SkillIcon"></i><span>Research Skills</span></div>
-                        <div class="SkillItem"><i class="fas fa-code SkillIcon"></i><span>Front-End Development</span></div>
-                        <div class="SkillItem"><i class="fas fa-gamepad SkillIcon"></i><span>Game Development</span></div>
-                        <div class="SkillItem"><i class="fas fa-lightbulb SkillIcon"></i><span>Problem Solving</span></div>
+
+    <main>
+        <div class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text fade-up">
+                        <div class="logo"><span>Adham</span> Mostafa Omar Taha Mahmoud</div>
+                        <div class="tagline">✨ Creative Developer</div>
+                        <h1>Building interactive<br>experiences with passion</h1>
+                        <p>I'm Adham Mostafa — a motivated developer transforming ideas into playful, functional
+                            projects across game dev, web, and visual programming.</p>
+                        <a href="#projects" class="btn"><i class="fas fa-arrow-down"></i> View Projects</a>
+                    </div>
+                    <div class="hero-image fade-up">
+                        <i class="fas fa-code"></i>
                     </div>
                 </div>
             </div>
-            <div class="ContactSection">
-                <a href="https://adham-mostafa14227.itch.io/" target="_blank" class="ContactLink"><i class="fas fa-gamepad"></i> Itch Io</a>
-                <a href="https://scratch.mit.edu/users/AdhamMostafa14227/" target="_blank" class="ContactLink"><i class="fas fa-rocket"></i> Scratch</a>
-                <a href="https://www.facebook.com/profile.php?id=61578969137540" target="_blank" class="ContactLink"><i class="fab fa-facebook"></i> Facebook</a>
-                <a href="https://github.com/Adham-Mostafa14227" target="_blank" class="ContactLink"><i class="fab fa-github"></i> GitHub</a>
-                <a href="https://www.linkedin.com/in/adham-mostafa-0545023a7/" target="_blank" class="ContactLink"><i class="fab fa-linkedin"></i> LinkedIn</a>
+        </div>
+
+        <div class="section" id="about">
+            <div class="container">
+                <h2>About Me</h2>
+                <div class="goals-content" style="margin-top: 28px; background: #FFFFFF; border-radius: 28px;">
+                    <p style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 16px;">I am a motivated and creative
+                        developer with a strong passion for programming and game development. I enjoy transforming ideas
+                        into interactive projects and continuously improving my skills through experimentation and
+                        practice.</p>
+                    <p style="font-size: 1.05rem; line-height: 1.6; margin-bottom: 16px;">I work across platforms like
+                        <strong>GitHub, itch.io, and Scratch</strong>, where I design, develop, and share my work. My
+                        approach combines creativity with problem-solving, allowing me to build projects that are both
+                        functional and engaging.</p>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px;">
+                        <span style="background: #F2F4F5; padding: 6px 14px; border-radius: 30px; font-size: 0.8rem;"><i
+                                class="fas fa-gamepad" style="color:#E85C6A;"></i> Game dev enthusiast</span>
+                        <span style="background: #F2F4F5; padding: 6px 14px; border-radius: 30px; font-size: 0.8rem;"><i
+                                class="fas fa-brain"></i> Creative thinker</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="StatsSection">
-        <div class="StatItem">
-            <div class="StatValue" id="ProjectsCount">10+</div>
-            <div class="StatLabel">Projects Completed</div>
+
+        <div class="section" id="projects">
+            <div class="container">
+                <h2>🚀 Projects & Platforms</h2>
+                <div class="projects-grid">
+                    <!-- GitHub card -->
+                    <div class="project-card fade-up">
+                        <div class="card-icon"><i class="fab fa-github-alt"></i></div>
+                        <h3>GitHub</h3>
+                        <p>A collection of coding projects that demonstrate my learning journey, programming skills, and
+                            problem-solving. I explore new ideas and improve my development techniques here.</p>
+                        <a href="https://github.com/Adham-Mostafa14227" class="project-link" target="_blank"
+                            rel="noopener noreferrer">Explore Repos <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <!-- itch.io card -->
+                    <div class="project-card fade-up">
+                        <div class="card-icon"><i class="fab fa-itch-io"></i></div>
+                        <h3>itch.io</h3>
+                        <p>A platform where I publish games and creative projects. My work focuses on fun gameplay,
+                            unique ideas, and interactive design. Play my latest builds!</p>
+                        <a href="https://adham-mostafa14227.itch.io/" class="project-link" target="_blank"
+                            rel="noopener noreferrer">Play Games <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <!-- Scratch card -->
+                    <div class="project-card fade-up">
+                        <div class="card-icon"><i class="fas fa-cubes"></i></div>
+                        <h3>Scratch</h3>
+                        <p>A space for building interactive games and animations using visual programming. It reflects
+                            my creativity and foundational coding skills.</p>
+                        <a href="https://scratch.mit.edu/users/AdhamMostafa14227/" class="project-link" target="_blank"
+                            rel="noopener noreferrer">See Animations <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="StatItem">
-            <div class="StatValue" id="ExperienceYears">3+</div>
-            <div class="StatLabel">Years of Experience</div>
+
+        <div class="section" id="skills">
+            <div class="container">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;" class="skills-goals-grid">
+                    <div>
+                        <h2>💡 Skills & Tools</h2>
+                        <div class="skills-list">
+                            <div class="skill-badge"><i class="fas fa-gamepad"></i> Game Development</div>
+                            <div class="skill-badge"><i class="fas fa-laptop-code"></i> Programming Basics</div>
+                            <div class="skill-badge"><i class="fas fa-lightbulb"></i> Creative Thinking</div>
+                            <div class="skill-badge"><i class="fas fa-puzzle-piece"></i> Problem Solving</div>
+                            <div class="skill-badge"><i class="fas fa-palette"></i> UI & Simple Design</div>
+                            <div class="skill-badge"><i class="fab fa-html5"></i> HTML/CSS/JS</div>
+                            <div class="skill-badge"><i class="fab fa-python"></i> Python</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2>🎯 Goals & Vision</h2>
+                        <div class="goals-content" style="background: white; padding: 24px;">
+                            <p style="margin-bottom: 12px;">I aim to grow into a professional developer by learning
+                                advanced programming, building high-quality projects, and creating engaging digital
+                                experiences that people enjoy.</p>
+                            <p style="margin-top: 16px; font-weight: 500; color: #E85C6A;"><i
+                                    class="fas fa-chart-line"></i> Next milestones: full‑stack exploration, game jams,
+                                and polished portfolio pieces.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="StatItem">
-            <div class="StatValue" id="SkillsCount">6</div>
-            <div class="StatLabel">Skills Mastered</div>
+
+        <div class="section" id="contact">
+            <div class="container">
+                <h2 style="text-align: center; display: block; text-align: center;">🌐 Connect with me</h2>
+                <h2:after style="left: 50%; transform: translateX(-50%); width: 80px;"></h2:after>
+                <div class="contact-links">
+                    <a href="https://github.com/Adham-Mostafa14227" class="contact-card" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://adham-mostafa14227.itch.io/" class="contact-card" target="_blank">
+                        <i class="fab fa-itch-io"></i> itch.io
+                    </a>
+                    <a href="https://scratch.mit.edu/users/AdhamMostafa14227/" class="contact-card" target="_blank">
+                        <i class="fa fa-rocket"></i> Scratch
+                    </a>
+                    <a href="mailto:adham.mostafa14227@gmail.com" class="contact-card">
+                        <i class="fas fa-envelope"></i> Email
+                    </a>
+                    <a href="https://www.linkedin.com/in/adham-mostafa-0545023a7/" class="contact-card">
+                        <i class="fa-brands fa-linkedin"></i> Linked In
+                    </a>
+                </div>
+                <p style="text-align: center; margin-top: 32px; color: #5a5e6e;">✨ Building interactive experiences, one
+                    line of code at a time.</p>
+            </div>
         </div>
-    </div>
-</div>
-<script>
-function calculateAge(birthday){
-    const birthDate=new Date(birthday);
-    const today=new Date();
-    let age=today.getFullYear()-birthDate.getFullYear();
-    const monthDiff=today.getMonth()-birthDate.getMonth();
-    if(monthDiff<0||(monthDiff===0 && today.getDate()<birthDate.getDate())) age--;
-    return age;
-}
-function updateAge(){
-    const birthday=new Date(2014,3,6);
-    const age=calculateAge(birthday);
-    document.getElementById('AgeValue').textContent=`${age} years old`;
-}
-const ThemeToggle=document.getElementById('ThemeToggle');
-const ThemeIcon=ThemeToggle.querySelector('i');
-ThemeToggle.addEventListener('click',()=>{
-    document.body.classList.toggle('DarkTheme');
-    ThemeIcon.className=document.body.classList.contains('DarkTheme')?'fas fa-sun':'fas fa-moon';
-});
-document.querySelectorAll('.SkillItem').forEach(skill=>{
-    skill.addEventListener('click',()=>{
-        const skillName=skill.querySelector('span').textContent;
-        alert(`You selected: ${skillName}\n\nAdham has demonstrated proficiency in this area through various projects and learning activities.`);
-    });
-});
-function animateCounter(element,targetValue,suffix=''){
-    let currentValue=0;
-    const increment=targetValue/50;
-    const timer=setInterval(()=>{
-        currentValue+=increment;
-        if(currentValue>=targetValue){currentValue=targetValue; clearInterval(timer);}
-        element.textContent=Math.floor(currentValue)+suffix;
-    },30);
-}
-document.addEventListener('DOMContentLoaded',()=>{
-    updateAge();
-    setTimeout(()=>{
-        animateCounter(document.getElementById('ProjectsCount'),10,'+');
-        animateCounter(document.getElementById('ExperienceYears'),3,'+');
-        animateCounter(document.getElementById('SkillsCount'),6);
-    },500);
-    const profilePicture=document.querySelector('.ProfilePicture');
-    profilePicture.addEventListener('mouseenter',()=>profilePicture.style.transform='scale(1.05)');
-    profilePicture.addEventListener('mouseleave',()=>profilePicture.style.transform='scale(1)');
-});
-</script>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Adham Mostafa — Passionate developer & creative thinker. Designed with minimal focus & coral
+                accents.</p>
+            <p style="margin-top: 8px;"><i class="fas fa-code"></i> Clean modern portfolio — responsive &
+                mobile-friendly</p>
+        </div>
+    </footer>
+
+    <script>
+        const fadeElements = document.querySelectorAll('.fade-up');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('appear');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -20px 0px" });
+
+        fadeElements.forEach(el => observer.observe(el));
+
+        const extraCards = document.querySelectorAll('.project-card, .goals-content, .skills-list');
+        extraCards.forEach(el => {
+            if (!el.classList.contains('fade-up')) {
+                el.classList.add('fade-up');
+                observer.observe(el);
+            }
+        });
+
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.fade-up').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+                    el.classList.add('appear');
+                }
+            });
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        const viewProjectsBtn = document.querySelector('.btn');
+        if (viewProjectsBtn && viewProjectsBtn.getAttribute('href') === '#projects') {
+            viewProjectsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        const styleContact = document.createElement('style');
+        styleContact.textContent = `#contact h2:after { left: 50%; transform: translateX(-50%); width: 80px; } @media (max-width: 768px) { .skills-goals-grid { grid-template-columns: 1fr; gap: 30px; } }`;
+        document.head.appendChild(styleContact);
+    </script>
 </body>
 
 </html>
-
